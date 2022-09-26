@@ -21,7 +21,7 @@ def main():
     try:
         with connect(
             # Setting up connection to server database
-            host="localhost",
+            host="129.115.195.70",
             user=input("Enter username: "),
             password=getpass("Enter password: "),
             database="fileserver"
