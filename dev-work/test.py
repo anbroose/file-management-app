@@ -21,7 +21,7 @@ def main():
     try:
         with connect(
             # Setting up connection to server database
-            host="129.115.195.70",
+            host="",
             user=input("Enter username: "),
             password=getpass("Enter password: "),
             database="fileserver"
@@ -42,38 +42,37 @@ def main():
                 user_args = int(input("\nWhat would you like to do?\n"
                 + "1 for upload, 2 for download, 3 for delete: "))
 
-                # Choose action for database
-                database_action(user_args)
+                # Case function decides to up, down or delete,
+                # once case is decided, user access should be checked
+                match user_args:
+                    case 1:
+                        print('option 1, upload:')
+                        file_name = ''
+                        file_ext = ''
+                        file_path = ''
+                        file_info(file_name, file_ext, file_path)
+                        print('\nHere is your file staged to upload:')
+                        print(f'file: {file_name}{file_ext}\n'
+                        + f'file path: {file_path}')
+
+                    case 2:
+                        return 'option 2, download:'
+
+                    case 3:
+                        return 'option 3, delete:'
+                            # Choose action for database
 
     except Error as e:
         print(e)
 
-
-def file_info():
+def file_info(file_name, file_ext, file_path):
     """Get user info and store it for mysql use"""
     file_name = input("\nInsert file name: ")
     file_ext = input("Insert file extension: ")
     file_ext = "." + file_ext
     file_path = input("Insert file path to encode and upload:\n")
 
-    print('\nHere is your file staged to upload:')
-    print(f'file: {file_name}{file_ext}\n'
-        + f'file path: {file_path}')
-
-# Function to decide whether to upload or delete from database
-def database_action(user_args):
-    """Case function decides to up, down or delete, 
-    once case is decided, user access should be checked"""
-    match user_args:
-        case 1:
-            print('option 1, upload:')
-            file_info()
-            
-        case 2:
-            return 'option 2, download:'
-
-        case 3:
-            return 'option 3, delete:'
+    return file_name, file_ext, file_path
 
 
 # Refactor this to input path file to upload
