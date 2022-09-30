@@ -16,12 +16,26 @@ from getpass import getpass
 from mysql.connector import Error, connect
 
 
+def file_info():
+    """Get user info and store it for mysql use"""
+    file_name = input("\nInsert file name: ")
+    file_ext = input("Insert file extension: ")
+    file_ext = "." + file_ext
+    file_path = input("Insert file path to encode and upload:\n")
+
+    print('\nHere is your file staged to upload:')
+    print(f'file: {file_name}{file_ext}\n'
+    + f'file path: {file_path}')
+
+    return file_name, file_ext, file_path
+
+
 def main():
     """Main function to run"""
     try:
         with connect(
             # Setting up connection to server database
-            host="",
+            host="localhost",
             user=input("Enter username: "),
             password=getpass("Enter password: "),
             database="fileserver"
@@ -47,13 +61,10 @@ def main():
                 match user_args:
                     case 1:
                         print('option 1, upload:')
-                        file_name = ''
-                        file_ext = ''
-                        file_path = ''
-                        file_info(file_name, file_ext, file_path)
-                        print('\nHere is your file staged to upload:')
-                        print(f'file: {file_name}{file_ext}\n'
-                        + f'file path: {file_path}')
+                        # file_name = ''
+                        # file_ext = ''
+                        # file_path = ''
+                        file_info()
 
                     case 2:
                         return 'option 2, download:'
@@ -65,14 +76,7 @@ def main():
     except Error as e:
         print(e)
 
-def file_info(file_name, file_ext, file_path):
-    """Get user info and store it for mysql use"""
-    file_name = input("\nInsert file name: ")
-    file_ext = input("Insert file extension: ")
-    file_ext = "." + file_ext
-    file_path = input("Insert file path to encode and upload:\n")
 
-    return file_name, file_ext, file_path
 
 
 # Refactor this to input path file to upload
