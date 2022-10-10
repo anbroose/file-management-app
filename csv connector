@@ -1,0 +1,16 @@
+import csv
+user_to_import = []
+with open('file.csv', 'rb') as users_csv_file:
+    users_reader = csv.reader(users_csv_file)
+    for row in users_reader:
+        user = {
+                'username': row[0],
+                'password': row[1],
+                'firstname': row[2],
+                'lastname': row[3],
+                'group': row[4],
+                'shell': row[5],
+                'hosts': row[6]
+
+        }
+        users_to_import.append(user)
