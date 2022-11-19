@@ -11,12 +11,12 @@ from mysql.connector import Error, connect
 from devwork.server_commands import *
 
 #logging config
-logging.basicConfig(
+logging.basicConfig( 
     level=logging.DEBUG,
     format="{asctime} {levelname:<8} {message}",
-    style='{'
+    style='{',
     filename='%slog' % __file__[-2],
-    filemode='a'
+    filemode='a' 
 )
 
 # Dealing with ldap first for authentification before initializing
