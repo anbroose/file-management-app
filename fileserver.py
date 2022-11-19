@@ -2,12 +2,22 @@
 Main program in which we will run build from
 """
 import ldap
+import logging
 from getpass import getpass
 import shutil
 from getpass import getpass
 from cryptography.fernet import Fernet
 from mysql.connector import Error, connect
 from devwork.server_commands import *
+
+#logging config
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="{asctime} {levelname:<8} {message}",
+    style='{'
+    filename='%slog' % __file__[-2],
+    filemode='a'
+)
 
 # Dealing with ldap first for authentification before initializing
 # connection to mysql server
@@ -30,8 +40,10 @@ def user_login():
         ldapconn.simple_bind_s(user, userpass)
         is_authenticated = True
         print(f"\nUser {cn} successfully logged in.")
+        logging.info(f"User {cn} has logged into the server")
     except:
         print("\nError authenticating user, please try again.\n")
+        logging.warning(f"User {cn} failed authentication")
 
     usercn = f"uid={cn}"
 
@@ -42,7 +54,9 @@ def user_login():
     for n in UID:
         if n.isdecimal():
             ID = ID + n
-    if is_authenticated: print(f"Welcome {cn}, you are goupID number {ID}.\n")
+    if is_authenticated: 
+        print(f"Welcome {cn}, you are goupID number {ID}.\n")
+        logging.info(f"{cn} has logged in with GID {ID}")
     return ID, is_authenticated
 
 # Once authenticated, server function will run
@@ -50,6 +64,8 @@ def server_use():
     """
     user_cred is a tuple that contains gidNum and 
     """
+
+
     user_cred = user_login()
     # Setting variables for easier readability
     is_authenticated = user_cred[1]
@@ -99,6 +115,7 @@ def server_use():
 
                             else:
                                 print("\nYou are not authorized to upload.\n")
+                                logging.warning("Unauthorized upload attempt")
                                 exit()
 
                         case 2:
@@ -118,6 +135,7 @@ def server_use():
 
                             else:
                                 print("\nYou are not authorized to download.\n")
+                                logging.warning("Unuthorized download attempt")
                                 exit()
 
                         case 3:
@@ -136,6 +154,7 @@ def server_use():
 
                             else:
                                 print("\nYou are not authorized to delete.\n")
+                                logging.warning("Unauthorized delete attempt")
                                 exit()
 
                     cursor.close()
@@ -146,4 +165,6 @@ def server_use():
 
 
 if __name__ == "__main__":
+    logging.info("Application session initialized")
     server_use()
+    logging.info("Application session ended")
